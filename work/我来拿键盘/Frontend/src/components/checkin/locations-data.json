@@ -3,8 +3,8 @@
         "id": 1,
         "name": "钟楼",
         "coordinates": [
-            119.1952,
-            26.0614
+            119.2715,
+            26.075
         ],
         "thumbnail": "/photos/checkin/fzu-clock-0.jpg",
         "description": "福州大学标志性建筑，见证学校发展历程",
@@ -19,8 +19,8 @@
         "id": 2,
         "name": "图书馆",
         "coordinates": [
-            119.1965,
-            26.0620
+            119.1977,
+            26.0590
         ],
         "thumbnail": "/photos/checkin/fzu-library-0.jpg",
         "description": "现代化综合图书馆，藏书丰富",
@@ -35,8 +35,8 @@
         "id": 3,
         "name": "荷花池",
         "coordinates": [
-            119.1945,
-            26.0608
+            119.1966,
+            26.0623
         ],
         "thumbnail": "/photos/checkin/fzu-pond-0.jpg",
         "description": "校园内的美丽景观，四季风景宜人",
@@ -51,8 +51,8 @@
         "id": 4,
         "name": "体育馆",
         "coordinates": [
-            119.1972,
-            26.0602
+            119.1971,
+            26.0513
         ],
         "thumbnail": "/photos/checkin/fzu-gym-0.jpg",
         "description": "设施齐全的综合体育场馆",
@@ -67,8 +67,8 @@
         "id": 5,
         "name": "教学楼A座",
         "coordinates": [
-            119.1958,
-            26.0616
+            119.1963,
+            26.06
         ],
         "thumbnail": "/photos/checkin/fzu-thbuilding-0.jpg",
         "description": "主要教学区域，承载无数求学梦想",

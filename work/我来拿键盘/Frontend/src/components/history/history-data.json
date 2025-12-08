@@ -2,50 +2,71 @@
   {
     "id": 1,
     "year": "1958",
-    "title": "建校伊始",
-    "description": "福州大学创建于1958年，首任校长为著名科学家贾庆国先生。学校初创时期，师生们发扬'艰苦奋斗'的精神，在荒地上建起了第一批校舍。",
-    "image": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1000&auto=format&fit=crop"
+    "title": "福州大学正式创建",
+    "description": "1958 年，福州大学在福州市鼓楼区创立，卢嘉锡担任首任校长。",
+    "image": "/photos/history/1.jpg"
   },
   {
     "id": 2,
     "year": "1960",
-    "title": "首届招生",
-    "description": "1960年，福州大学迎来了第一批本科生。来自五湖四海的学子汇聚一堂，开启了求知若渴的大学生涯。",
-    "image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1000&auto=format&fit=crop"
+    "title": "迎来首届本科生",
+    "description": "福州大学开始正式招收本科学生。",
+    "image": "/photos/history/2.jpg"
   },
   {
     "id": 3,
-    "year": "1978",
-    "title": "改革开放",
-    "description": "随着改革开放的春风吹遍神州大地，福州大学也迎来了新的发展机遇。学校恢复高考招生，教学科研工作全面步入正轨。",
-    "image": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1000&auto=format&fit=crop"
+    "year": "1981",
+    "title": "成为首批硕士授予单位",
+    "description": "获批多个硕士点，研究生教育体系建立。",
+    "image": "/photos/history/3.png"
   },
   {
     "id": 4,
-    "year": "1996",
-    "title": "211工程",
-    "description": "1996年，福州大学入选国家'211工程'重点建设高校，标志着学校进入了国家重点大学行列，办学实力显著提升。",
-    "image": "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1000&auto=format&fit=crop"
+    "year": "1984",
+    "title": "获批首个博士点",
+    "description": "物理化学博士点获批。",
+    "image": "/photos/history/4.jpg"
   },
   {
     "id": 5,
-    "year": "2005",
-    "title": "新校区搬迁",
-    "description": "2005年，福州大学主体搬迁至旗山校区。新校区环境优美，设施先进，为学校的长远发展奠定了坚实基础。",
-    "image": "https://images.unsplash.com/photo-1592280771190-3e2e4d571952?q=80&w=1000&auto=format&fit=crop"
+    "year": "1996",
+    "title": "入选211工程",
+    "description": "福大进入国家重点建设高校行列。",
+    "image": "/photos/history/5.png"
   },
   {
     "id": 6,
-    "year": "2017",
-    "title": "双一流建设",
-    "description": "2017年，福州大学入选国家'双一流'建设高校名单，化学学科入选世界一流学科建设名单，开启了建设世界一流大学的新征程。",
-    "image": "https://images.unsplash.com/photo-1590012314607-cda9d9b699ae?q=80&w=1000&auto=format&fit=crop"
+    "year": "2005",
+    "title": "旗山校区正式启用",
+    "description": "福大主体迁入旗山校区。",
+    "image": "/photos/history/6.jpg"
   },
   {
     "id": 7,
+    "year": "2017",
+    "title": "入选双一流建设高校",
+    "description": "化学学科入选世界一流学科。",
+    "image": "/photos/history/7.jpg"
+  },
+  {
+    "id": 8,
+    "year": "2020",
+    "title": "化学学科跻身 ESI 全球前 1‰",
+    "description": "科研国际影响力跃升。",
+    "image": "/photos/history/8.png"
+  },
+  {
+    "id": 9,
     "year": "2023",
-    "title": "建校65周年",
-    "description": "2023年，福州大学迎来建校65周年华诞。六十五载风雨兼程，六十五载桃李芬芳，福大人始终秉承'明德至诚，博学远志'的校训，砥砺前行。",
-    "image": "https://images.unsplash.com/photo-1627556704290-2b1f5853ff78?q=80&w=1000&auto=format&fit=crop"
+    "title": "建校 65 周年",
+    "description": "校史馆升级开放，大型校庆活动举行。",
+    "image": "/photos/history/9.jpg"
+  },
+  {
+    "id": 10,
+    "year": "2024",
+    "title": "新一轮双一流建设",
+    "description": "学科发展持续推进。",
+    "image": "/photos/history/10.jpg"
   }
 ]

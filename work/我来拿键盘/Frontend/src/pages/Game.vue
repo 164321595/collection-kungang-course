@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen bg-[#fff8e1] flex items-center justify-center p-4 font-sans">
+  <div class="min-h-screen bg-[#fff8e1] flex items-center justify-center p-4 font-noto">
     <div class="max-w-6xl w-full mx-auto">
       <!-- 标题区域 -->
       <div class="text-center mb-8">
         <h1 class="text-5xl font-extrabold text-[#5d4037] mb-2 tracking-wide drop-shadow-sm">
-          合成大福州
+          合成福大
         </h1>
         <p class="text-[#8d6e63] text-lg">物理合成 · 挑战高分 · 实时榜单</p>
       </div>
@@ -29,19 +29,23 @@
             <div
               class="bg-white/90 backdrop-blur text-[#5d4037] px-4 py-2 rounded-full font-bold shadow-sm border border-amber-200"
             >
-              下个水果:
-              <div class="inline-block align-middle ml-1 w-8 h-8 flex items-center justify-center">
+              NEXT:
+              <div class="inline-block align-middle ml-1 w-10 h-8 flex items-center justify-center relative">
                 <img
                   v-if="nextFruitImage"
                   :src="nextFruitImage"
-                  class="w-full h-full rounded-full object-cover border border-amber-200"
+                  class="w-full h-full rounded-full object-cover border-2 border-white"
                   alt="next"
                 />
                 <span
                   v-else
-                  class="inline-block w-4 h-4 rounded-full"
+                  class="inline-block w-full h-full rounded-full border-2 border-white"
                   :style="{ backgroundColor: nextFruitColor }"
                 ></span>
+                <!-- NEXT水果文字 -->
+                <span class="absolute inset-0 flex items-center justify-center text-white font-qingke font-bold text-xs shadow-sm whitespace-nowrap text-shadow-outline">
+                  {{ FRUITS[nextFruitIndex]?.text || '' }}
+                </span>
               </div>
             </div>
           </div>
@@ -218,11 +222,7 @@ import { useUserStore } from '@/stores/user'
 import { getApiUrl, API_ENDPOINTS } from '@/config/api'
 
 // ===================== 类型定义 =====================
-/** 玩家信息 **/
-interface PlayerInfo {
-  id: string
-  name: string
-}
+
 
 /** 榜单条目 */
 interface RankItem {
@@ -254,17 +254,13 @@ interface SubmitStatus {
  * 4. 如果 img 留空，系统会自动使用 color 字段的颜色绘制圆球
  */
 const FRUITS = [
-  { level: 0, radius: 20, color: '#9e00eb', score: 2, img: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1000&auto=format&fit=crop' }, // 葡萄
-  { level: 1, radius: 30, color: '#ff5454', score: 4, img: '' }, // 樱桃
-  { level: 2, radius: 42, color: '#ffbd14', score: 6, img: '' }, // 橘子
-  { level: 3, radius: 54, color: '#ffec27', score: 8, img: '' }, // 柠檬
-  { level: 4, radius: 68, color: '#54ff6e', score: 10, img: '' }, // 猕猴桃
-  { level: 5, radius: 82, color: '#ff5454', score: 12, img: '' }, // 西红柿
-  { level: 6, radius: 98, color: '#ffccaa', score: 14, img: '' }, // 桃子
-  { level: 7, radius: 115, color: '#ffd93f', score: 16, img: '' }, // 菠萝
-  { level: 8, radius: 135, color: '#ff88ff', score: 18, img: '' }, // 椰子
-  { level: 9, radius: 155, color: '#27ae60', score: 20, img: '' }, // 西瓜
-  { level: 10, radius: 175, color: '#27ae60', score: 40, img: '' }, // 大西瓜
+  { level: 0, radius: 20, color: '#9e00eb', score: 2, img: '', text: '鼓浪屿' }, // 厦门鼓浪屿校区
+  { level: 1, radius: 30, color: '#ff5454', score: 4, img: '', text: '集美' }, // 厦门集美校区
+  { level: 2, radius: 42, color: '#ffbd14', score: 6, img: '', text: '泉港' }, // 泉港校区
+  { level: 3, radius: 54, color: '#ffec27', score: 8, img: '', text: '晋江' }, // 晋江校区
+  { level: 4, radius: 68, color: '#54ff6e', score: 10, img: '', text: '铜盘' }, // 铜盘校区
+  { level: 5, radius: 82, color: '#ff5454', score: 12, img: '', text: '怡山' }, // 怡山校区
+  { level: 6, radius: 98, color: '#ff6b35', score: 14, img: '', text: '旗山' }, // 旗山校区（主校区）- 颜色调深
 ]
 
 const GAME_WIDTH = 450
@@ -309,6 +305,20 @@ const nextFruitImage = computed(() => {
 
 // 预处理后的纹理缓存
 const processedTextures = ref<Record<number, string>>({})
+
+// 颗粒系统
+interface Particle {
+  x: number
+  y: number
+  vx: number
+  vy: number
+  life: number
+  maxLife: number
+  color: string
+  size: number
+}
+
+const particles = ref<Particle[]>([])
 
 // 本地存储key
 const keyPersonal = computed(() => `watermelon_personal_${player.value.id}`)
@@ -375,6 +385,10 @@ const initGame = async () => {
       Matter.Engine.clear(engine)
       if (render) {
         Matter.Render.stop(render)
+        // 移除键盘事件监听器
+        if (render.canvas?.keyboardHandler) {
+          window.removeEventListener('keydown', render.canvas.keyboardHandler)
+        }
         render.canvas?.remove()
       }
     }
@@ -440,7 +454,12 @@ const initGame = async () => {
     // 监听碰撞和更新
     Matter.Events.on(engine, 'collisionStart', handleCollisions)
     Matter.Events.on(engine, 'afterUpdate', checkGameOver)
-    Matter.Events.on(render, 'afterRender', drawGuideLines)
+    Matter.Events.on(render, 'afterRender', () => {
+      drawGuideLines()
+      drawFruitTexts()
+      updateParticles()
+      drawParticles()
+    })
   } catch (err) {
     console.error('Game Init Error:', err)
   }
@@ -448,6 +467,16 @@ const initGame = async () => {
 
 // 3. 辅助函数：生成渲染配置（支持图片）
 const getRenderConfig = (fruitData: any) => {
+  // 边框配置 - 双层边框和发光效果
+  const borderConfig = {
+    strokeStyle: '#ffffff',
+    lineWidth: 2,
+    shadowColor: '#5d4037',
+    shadowBlur: 15,
+    shadowOffsetX: 0,
+    shadowOffsetY: 0
+  };
+
   // 优先使用预处理后的圆形纹理
   if (processedTextures.value[fruitData.level]) {
     return {
@@ -456,6 +485,7 @@ const getRenderConfig = (fruitData: any) => {
         xScale: (fruitData.radius * 2) / 200, // 假设处理后的图片是 200x200
         yScale: (fruitData.radius * 2) / 200,
       },
+      ...borderConfig
     }
   } else if (fruitData.img) {
     // 降级处理：直接使用原图（可能不是圆的）
@@ -465,10 +495,12 @@ const getRenderConfig = (fruitData: any) => {
         xScale: (fruitData.radius * 2) / 200, // 这里的缩放可能不准确，取决于原图尺寸
         yScale: (fruitData.radius * 2) / 200,
       },
+      ...borderConfig
     }
   } else {
     return {
       fillStyle: fruitData.color,
+      ...borderConfig
     }
   }
 }
@@ -544,12 +576,21 @@ const createPendingFruit = () => {
     isSensor: true, // 传感器模式：不发生物理碰撞
     isStatic: true, // 静态：不重力下落
     label: 'pending',
+    level: index,
     render: getRenderConfig(fruitData),
     customData: { level: index },
   })
 
+  // 创建水果生成时的颗粒效果 - 传递级别信息
+  createFruitParticles(spawnX, 60, fruitData.color, index)
+
   Matter.World.add(engine.world, currentFruit)
   isClickable = true
+}
+
+// 为水果添加生成颗粒效果
+const createFruitParticles = (x: number, y: number, color: string, level: number = 0) => {
+  createParticles(x, y, 10, color, level)
 }
 
 // 5. 交互事件
@@ -629,6 +670,37 @@ const bindInputEvents = () => {
   canvas.addEventListener('touchstart', handleTap, { passive: false })
   // 可选：也为桌面端添加点击放置功能
   canvas.addEventListener('mousedown', handleTap)
+
+  // 添加键盘控制功能
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (!isClickable || !currentFruit || !gameRunning) return
+
+    switch (e.key) {
+      case 'ArrowLeft':
+        // 左方向键：向左移动
+        e.preventDefault()
+        currentPointerX = Math.max(currentFruit.circleRadius + 10, currentPointerX - 20)
+        Matter.Body.setPosition(currentFruit, { x: currentPointerX, y: 60 })
+        break
+      case 'ArrowRight':
+        // 右方向键：向右移动
+        e.preventDefault()
+        currentPointerX = Math.min(currentPointerX + 20, GAME_WIDTH - currentFruit.circleRadius - 10)
+        Matter.Body.setPosition(currentFruit, { x: currentPointerX, y: 60 })
+        break
+      case ' ': // 空格键
+      case 'Enter': // 回车键
+        // 释放水果
+        e.preventDefault()
+        handleRelease(e as unknown as MouseEvent)
+        break
+    }
+  }
+
+  window.addEventListener('keydown', handleKeyDown)
+
+  // 存储键盘事件监听器以便清理
+  canvas.keyboardHandler = handleKeyDown
 }
 
 // 6. 碰撞合成逻辑
@@ -656,19 +728,23 @@ const handleCollisions = (event: any) => {
           bodiesToRemove.add(bodyA)
           bodiesToRemove.add(bodyB)
 
-          const newLevel = level + 1
+          const newLevel: number = level + 1
           const newFruitData = FRUITS[newLevel]
           if (!newFruitData) return
 
           const midX = (bodyA.position.x + bodyB.position.x) / 2
           const midY = (bodyA.position.y + bodyB.position.y) / 2
 
+          // 创建碰撞颗粒效果 - 传递新水果的级别
+  createParticles(midX, midY, 15, FRUITS[newLevel]?.color || '#000000', newLevel)
+
           const newBody = Matter.Bodies.circle(midX, midY, newFruitData.radius, {
-            label: 'fruit',
-            restitution: 0.2,
-            render: getRenderConfig(newFruitData),
-            customData: { level: newLevel },
-          })
+    label: 'fruit',
+    level: newLevel,
+    restitution: 0.2,
+    render: getRenderConfig(newFruitData),
+    customData: { level: newLevel },
+  })
 
           newBodiesToAdd.push(newBody)
 
@@ -727,6 +803,105 @@ const drawGuideLines = () => {
     ctx.lineWidth = 2
     ctx.setLineDash([5, 5])
     ctx.stroke()
+  }
+
+  ctx.restore()
+}
+
+// 颗粒系统函数 - 根据球的级别调整颗粒效果
+const createParticles = (x: number, y: number, count: number, color: string, level: number = 0) => {
+  const levelMultiplier = 1 + level * 0.2 // 级别越高，效果越明显
+  const baseCount = count * levelMultiplier
+
+  for (let i = 0; i < baseCount; i++) {
+    const angle = (Math.PI * 2 * i) / baseCount
+    const speed = (2 + Math.random() * 3) * levelMultiplier
+    particles.value.push({
+      x,
+      y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 1,
+      maxLife: (30 + Math.random() * 20) * (1 + level * 0.1),
+      color,
+      size: (2 + Math.random() * 3) * (1 + level * 0.15)
+    })
+  }
+}
+
+const updateParticles = () => {
+  particles.value = particles.value.filter(particle => {
+    particle.x += particle.vx
+    particle.y += particle.vy
+    particle.vy += 0.1 // 重力
+    particle.life++
+    return particle.life < particle.maxLife
+  })
+}
+
+const drawParticles = () => {
+  if (!render) return
+  const ctx = render.context
+  ctx.save()
+
+  particles.value.forEach(particle => {
+    const alpha = 1 - particle.life / particle.maxLife
+    ctx.globalAlpha = alpha
+    ctx.fillStyle = particle.color
+    ctx.beginPath()
+    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+    ctx.fill()
+  })
+
+  ctx.restore()
+}
+
+// 9. 绘制水果文字
+const drawFruitTexts = () => {
+  if (!render || !engine) return
+  const ctx = render.context
+  ctx.save()
+
+  // 遍历所有水果物体
+  for (const body of engine.world.bodies) {
+    if ((body.label === 'fruit' || body.label === 'pending') && body.circleRadius) {
+      // 找到对应的水果数据
+      let level = body.level || body.customData?.level
+      if (level === undefined) {
+        // 如果没有level信息，根据半径找到对应的水果数据
+        const fruitDataByRadius = FRUITS.find(f => f.radius === body.circleRadius)
+        level = fruitDataByRadius ? fruitDataByRadius.level : 0
+      }
+      const fruitData = FRUITS[level]
+
+      if (fruitData && fruitData.text) {
+        // 在水果中心绘制文字
+        const fontSize = Math.max(14, body.circleRadius * 0.7)
+        // 使用活泼的字体样式
+        ctx.font = `${fontSize}px 'ZCOOL QingKe HuangYou', cursive`
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+
+        // 添加文字阴影效果
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.4)'
+        ctx.shadowBlur = 5
+        ctx.shadowOffsetX = 2
+        ctx.shadowOffsetY = 2
+
+        // 文字描边 - 增强可读性
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)'
+        ctx.lineWidth = fontSize * 0.1
+        ctx.strokeText(fruitData.text, body.position.x, body.position.y)
+
+        // 绘制文字填充
+        ctx.fillStyle = '#ffffff' // 白色文字
+        ctx.fillText(fruitData.text, body.position.x, body.position.y)
+
+        // 重置阴影和线条宽度
+        ctx.shadowBlur = 0
+        ctx.lineWidth = 1
+      }
+    }
   }
 
   ctx.restore()
@@ -1091,6 +1266,15 @@ onUnmounted(() => {
 .scrollbar-thin::-webkit-scrollbar-thumb {
   background-color: #ffe082;
   border-radius: 20px;
+}
+
+/* 文字外框效果 */
+.text-shadow-outline {
+  text-shadow:
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
 }
 
 /* 简单的淡入动画 */

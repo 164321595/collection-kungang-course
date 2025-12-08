@@ -35,7 +35,7 @@
 
     <!-- 右侧滚动区域：时间轴列表 -->
     <div class="w-full md:w-1/2 h-1/2 md:h-full overflow-y-auto relative scroll-smooth bg-parchment" ref="scrollContainer">
-      <div class="flex flex-col py-[300%]">
+      <div class="flex flex-col pb-[150%] pt-[15%]">
         <div class="relative border-l-2 border-amber-800/30 ml-12 md:ml-24 space-y-32 pr-8 md:pr-16 max-w-xl">
           <div
             v-for="(item, index) in historyData"

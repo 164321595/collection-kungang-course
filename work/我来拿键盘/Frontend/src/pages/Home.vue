@@ -1,7 +1,7 @@
 <template>
   <div class="h-full bg-parchment relative overflow-hidden">
     <div
-      class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1529590003495-2e0a378906d1?q=80&w=1920&auto=format&fit=crop')] bg-center bg-cover opacity-40"
+      class="absolute inset-0 bg-[url('')] bg-center bg-cover opacity-40"
     ></div>
     <div class="relative z-10 flex items-center justify-center h-full">
       <div class="text-center space-y-4">

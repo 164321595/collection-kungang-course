@@ -4,7 +4,7 @@
   >
     <!-- 背景图 -->
     <div
-      class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1529590003495-2e0a378906d1?q=80&w=1920&auto=format&fit=crop')] bg-center bg-cover opacity-40"
+      class="absolute inset-0 bg-[url('')] bg-center bg-cover opacity-40"
     ></div>
 
     <!-- 主容器：控制布局切换 -->
@@ -25,7 +25,13 @@
           <div class="mt-6 flex items-center justify-center">
             <div
               class="w-64 h-40 md:w-80 md:h-52 bg-white/60 border border-white/70 shadow-lg rounded-xl opacity-0 scale-95 animate-text-up delay-300"
-            ></div>
+            >
+              <img
+                src="/photos/cover.jpg"
+                alt="福州大学校园"
+                class="w-full h-full object-cover rounded-lg"
+              />
+            </div>
           </div>
         </div>
       </div>
